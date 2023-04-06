@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="local"> </string>
+    <string name="cloud"> </string>
+    <string name="add"> </string>
+    <string name="questions"> </string>
+    <string name="profile"> </string>
+</resources>
