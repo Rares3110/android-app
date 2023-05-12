@@ -16,10 +16,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:cardCornerRadius="8dp"
-            app:cardElevation="12dp"
+            app:cardElevation="10dp"
             app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -29,7 +28,7 @@
                 android:layout_height="wrap_content"
                 app:iconifiedByDefault="false"
                 app:queryBackground="@android:color/transparent"
-                app:queryHint="Search here ..." />
+                app:queryHint="Search file..." />
 
         </com.google.android.material.card.MaterialCardView>
 

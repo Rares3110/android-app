@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.*
 import android.graphics.pdf.PdfDocument
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,27 +19,29 @@ import java.io.FileOutputStream
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
-    private val localFragment = Local()
+    private val filesFragment = FilesFragment()
+    private val cloudFragment = CloudFragment()
     private var PERMISSION_CODE = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        replaceFragment(localFragment)
+        replaceFragment(filesFragment)
 
         binding.bottomNavigationView.setOnItemSelectedListener {
 
             when(it.itemId) {
-                R.id.local -> replaceFragment(localFragment)
+                R.id.local -> replaceFragment(filesFragment)
+                R.id.cloud -> replaceFragment(cloudFragment)
                 R.id.add -> replaceFragment(Add())
 
-                else -> replaceFragment(localFragment)
+                else -> replaceFragment(filesFragment)
             }
             true
         }
 
-        binding.testPdfButton.setOnClickListener() {
+        binding.testPdfButton.setOnClickListener {
             testPDFViewer()
         }
 
