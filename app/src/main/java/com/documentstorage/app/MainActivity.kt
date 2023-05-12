@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     private val filesFragment = FilesFragment()
     private val cloudFragment = CloudFragment()
-    private var PERMISSION_CODE = 101
+    private val permissionCode = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,21 +41,23 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        binding.testPdfButton.setOnClickListener {
-            testPDFViewer()
-        }
-
         if (checkPermissions())
             requestPermission()
+
+        generatePDFTest("File1.pdf")
+        generatePDFTest("File2.pdf")
+        generatePDFTest("File3.pdf")
+        generatePDFTest("File4.pdf")
+        generatePDFTest("File5.pdf")
     }
 
     private fun checkPermissions(): Boolean {
-        var writeStoragePermission = ContextCompat.checkSelfPermission(
+        val writeStoragePermission = ContextCompat.checkSelfPermission(
             applicationContext,
             WRITE_EXTERNAL_STORAGE
         )
 
-        var readStoragePermission = ContextCompat.checkSelfPermission(
+        val readStoragePermission = ContextCompat.checkSelfPermission(
             applicationContext,
             READ_EXTERNAL_STORAGE
         )
@@ -67,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), PERMISSION_CODE
+            arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), permissionCode
         )
     }
 
@@ -78,28 +80,13 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    private fun testPDFViewer() {
-        val file = generatePDFTest()
+    private fun generatePDFTest(fileName: String): File {
+        val pdfDocument = PdfDocument()
 
-        val intent = Intent(this, PDFViewerActivity::class.java)
-        intent.putExtra(
-            "filePath",
-            file.path
-        ) // Replace "key" with your desired key and "value" with the actual value to pass
-        startActivity(intent)
-    }
-
-    private fun generatePDFTest(): File {
-        var pdfDocument = PdfDocument()
-
-        var paint = Paint()
-        var title = Paint()
-
-        var myPageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(1120, 3000, 1).create()
-
-        var myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
-
-        var canvas: Canvas = myPage.canvas
+        val title = Paint()
+        val myPageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(1120, 3000, 1).create()
+        val myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
+        val canvas: Canvas = myPage.canvas
 
         title.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         title.textSize = 15F
@@ -113,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         canvas.drawText("This is sample document which we have created.", 396F, 560F, title)
         pdfDocument.finishPage(myPage)
 
-        val file = File(this.getExternalFilesDir(null), "GFG.pdf")
+        val file = File(this.getExternalFilesDir(null), fileName)
 
         try {
             pdfDocument.writeTo(FileOutputStream(file))

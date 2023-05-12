@@ -1,6 +1,7 @@
 package com.documentstorage.app
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,12 @@ class PdfAdapter(private var lista: List<PdfData>) : RecyclerView.Adapter<PdfAda
             if (position != RecyclerView.NO_POSITION) {
                 // Executa actiunea corespunzatoare cand se face click pe item-ul respectiv
                 Log.i("log", "Ai apasat pe PDF")
+                val intent = Intent(itemView.context, PDFViewerActivity::class.java)
+                intent.putExtra(
+                    "filePath",
+                    itemView.context.getExternalFilesDir(null)?.path + "/" + titleTv.text
+                ) // Replace "key" with your desired key and "value" with the actual value to pass
+                itemView.context.startActivity(intent)
             }
         }
     }

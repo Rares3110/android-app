@@ -1,6 +1,7 @@
 package com.documentstorage.app
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -34,7 +36,8 @@ class FilesFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        addDataToList()
+        //addDataToList()
+        addData()
         adapter = PdfAdapter(pdfList)
         recyclerView.adapter = adapter
 
@@ -75,6 +78,30 @@ class FilesFragment : Fragment() {
         pdfList.add(PdfData("pdf4", R.drawable.pdf_ico))
         pdfList.add(PdfData("rares e gay", R.drawable.pdf_ico))
         pdfList.add(PdfData("rares e super gay", R.drawable.pdf_ico))
+    }
 
+    private fun addData() {
+        pdfList = ArrayList<PdfData>()
+        val files = mutableListOf<File>()
+        val directory = context?.getExternalFilesDir(null)
+        if(directory != null)
+            searchFilesWithType(directory, files)
+
+        for(file in files)
+            pdfList.add(PdfData(file.name, R.drawable.pdf_ico))
+    }
+
+    private fun searchFilesWithType(directory: File, fileList: MutableList<File>) {
+        val files = directory.listFiles()
+
+        if (files != null) {
+            for (file in files) {
+                if (!file.isDirectory) {
+                    if (file.name.endsWith(".pdf", ignoreCase = true)) {
+                        fileList.add(file)
+                    }
+                }
+            }
+        }
     }
 }
