@@ -3,16 +3,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Add Fragment"
-        android:textAlignment="center"
-        android:textSize="26sp"
-        android:textStyle="bold" />
-
-</FrameLayout>
+    tools:context=".AddFragment"/>
