@@ -36,7 +36,6 @@ class FilesFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        //addDataToList()
         addData()
         adapter = PDFAdapter(pdfList)
         recyclerView.adapter = adapter
@@ -69,15 +68,6 @@ class FilesFragment : Fragment() {
             }
         }
 
-    }
-    private fun addDataToList() {
-//        pdfList = ArrayList<PdfData>()
-//        pdfList.add(PdfData("pdf1", R.drawable.baseline_cloud_24, Date()))
-//        pdfList.add(PdfData("pdf2", R.drawable.pdf_ico, Date()))
-//        pdfList.add(PdfData("pdf3", R.drawable.pdf_ico, Date()))
-//        pdfList.add(PdfData("pdf4", R.drawable.pdf_ico, Date()))
-//        pdfList.add(PdfData("rares e gay", R.drawable.pdf_ico, Date()))
-//        pdfList.add(PdfData("rares e super gay", R.drawable.pdf_ico, Date()))
     }
 
     private fun addData() {
