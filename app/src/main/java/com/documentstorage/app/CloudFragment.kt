@@ -9,14 +9,15 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class CloudFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
-    private lateinit var pdfList: ArrayList<PdfData>
-    private lateinit var adapter: PdfAdapter
+    private lateinit var pdfList: ArrayList<PDFData>
+    private lateinit var adapter: PDFAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +36,7 @@ class CloudFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         addDataToList()
-        adapter = PdfAdapter(pdfList)
+        adapter = PDFAdapter(pdfList)
         recyclerView.adapter = adapter
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -52,7 +53,7 @@ class CloudFragment : Fragment() {
 
     private fun filterList(query: String?) {
         if (query != null) {
-            val filteredList  =  ArrayList<PdfData>()
+            val filteredList  =  ArrayList<PDFData>()
             for (it in pdfList) {
                 if (it.title.lowercase(Locale.ROOT).contains(query.lowercase()))
                     filteredList.add(it)
@@ -68,10 +69,11 @@ class CloudFragment : Fragment() {
 
     }
     private fun addDataToList() {
-        pdfList = ArrayList<PdfData>()
-        pdfList.add(PdfData("pdf1", R.drawable.baseline_cloud_24))
-        pdfList.add(PdfData("pdf2", R.drawable.baseline_cloud_24))
-        pdfList.add(PdfData("pdf3", R.drawable.baseline_cloud_24))
-        pdfList.add(PdfData("pdf4", R.drawable.baseline_cloud_24))
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+        pdfList = ArrayList<PDFData>()
+        pdfList.add(PDFData("pdf1", R.drawable.baseline_cloud_24, dateFormat.format(Date())))
+        pdfList.add(PDFData("pdf2", R.drawable.baseline_cloud_24, dateFormat.format(Date())))
+        pdfList.add(PDFData("pdf3", R.drawable.baseline_cloud_24, dateFormat.format(Date())))
+        pdfList.add(PDFData("pdf4", R.drawable.baseline_cloud_24, dateFormat.format(Date())))
     }
 }
