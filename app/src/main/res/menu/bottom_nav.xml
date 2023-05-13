@@ -3,8 +3,8 @@
 
     <item
         android:icon="@drawable/baseline_folder_24"
-        android:id="@+id/local"
-        android:title="@string/local" />
+        android:id="@+id/files"
+        android:title="@string/files" />
     <item
         android:icon="@drawable/baseline_cloud_24"
         android:id="@+id/cloud"

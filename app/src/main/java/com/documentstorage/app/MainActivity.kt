@@ -32,9 +32,9 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener {
 
             when(it.itemId) {
-                R.id.local -> replaceFragment(filesFragment)
+                R.id.files -> replaceFragment(filesFragment)
                 R.id.cloud -> replaceFragment(cloudFragment)
-                R.id.add -> replaceFragment(Add())
+                R.id.add -> replaceFragment(AddFragment())
 
                 else -> replaceFragment(filesFragment)
             }
