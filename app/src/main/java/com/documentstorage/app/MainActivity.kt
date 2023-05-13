@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId) {
                 R.id.files -> replaceFragment(filesFragment)
                 R.id.cloud -> replaceFragment(cloudFragment)
-                R.id.add -> replaceFragment(AddFragment())
+                R.id.add -> startActivity(Intent(this, CameraActivity::class.java))
 
                 else -> replaceFragment(filesFragment)
             }
