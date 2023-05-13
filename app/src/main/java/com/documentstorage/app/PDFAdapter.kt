@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class PdfAdapter(private var lista: List<PdfData>) : RecyclerView.Adapter<PdfAdapter.PdfViewHolder>() {
+class PDFAdapter(private var lista: List<PDFData>) : RecyclerView.Adapter<PDFAdapter.PdfViewHolder>() {
 
     inner class PdfViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener { // Adauga interfata View.OnClickListener pentru a face elementul clickable
         // Clasa pentru elementul din lista
@@ -18,8 +18,9 @@ class PdfAdapter(private var lista: List<PdfData>) : RecyclerView.Adapter<PdfAda
             itemView.setOnClickListener(this) // Seteaza listenerul pe itemView
         }
 
-        val logo: ImageView = itemView.findViewById(R.id.logoIv)
-        val titleTv: TextView = itemView.findViewById(R.id.titleTv)
+        val logo: ImageView = itemView.findViewById(R.id.ivLogo)
+        val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        val tvDate: TextView = itemView.findViewById(R.id.tvDate)
 
         override fun onClick(view: View?) {
             // Implementeaza metoda onClick din View.OnClickListener
@@ -30,7 +31,7 @@ class PdfAdapter(private var lista: List<PdfData>) : RecyclerView.Adapter<PdfAda
                 val intent = Intent(itemView.context, PDFViewerActivity::class.java)
                 intent.putExtra(
                     "filePath",
-                    itemView.context.getExternalFilesDir(null)?.path + "/" + titleTv.text
+                    itemView.context.getExternalFilesDir(null)?.path + "/" + tvTitle.text
                 ) // Replace "key" with your desired key and "value" with the actual value to pass
                 itemView.context.startActivity(intent)
             }
@@ -38,13 +39,13 @@ class PdfAdapter(private var lista: List<PdfData>) : RecyclerView.Adapter<PdfAda
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setFilteredList(lista: List<PdfData>) {
+    fun setFilteredList(lista: List<PDFData>) {
         this.lista = lista
         notifyDataSetChanged() // Notifica adapterul despre modificarea listei de itemi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PdfViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false) // Creeaza o instanta a layout-ului list_item pentru fiecare item
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_pdf, parent, false) // Creeaza o instanta a layout-ului list_item pentru fiecare item
         return PdfViewHolder(view) // Returneaza un ViewHolder care contine referintele catre elementele grafice din layout-ul list_item
     }
 
@@ -54,7 +55,8 @@ class PdfAdapter(private var lista: List<PdfData>) : RecyclerView.Adapter<PdfAda
 
     override fun onBindViewHolder(holder: PdfViewHolder, position: Int) {
         holder.logo.setImageResource(lista[position].logo) // Seteaza imaginea in ImageView pentru item-ul corespunzator
-        holder.titleTv.text = lista[position].title // Seteaza textul in TextView pentru item-ul corespunzator
+        holder.tvTitle.text = lista[position].title // Seteaza textul in TextView pentru item-ul corespunzator
+        holder.tvDate.text = lista[position].date
     }
 
 }

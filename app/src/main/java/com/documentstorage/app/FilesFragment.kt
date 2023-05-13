@@ -1,7 +1,6 @@
 package com.documentstorage.app
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +10,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class FilesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
-    private lateinit var pdfList: ArrayList<PdfData>
-    private lateinit var adapter: PdfAdapter
+    private lateinit var pdfList: ArrayList<PDFData>
+    private lateinit var adapter: PDFAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +38,7 @@ class FilesFragment : Fragment() {
 
         //addDataToList()
         addData()
-        adapter = PdfAdapter(pdfList)
+        adapter = PDFAdapter(pdfList)
         recyclerView.adapter = adapter
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -55,7 +55,7 @@ class FilesFragment : Fragment() {
 
     private fun filterList(query: String?) {
         if (query != null) {
-            val filteredList  =  ArrayList<PdfData>()
+            val filteredList  =  ArrayList<PDFData>()
             for (it in pdfList) {
                 if (it.title.lowercase(Locale.ROOT).contains(query.lowercase()))
                     filteredList.add(it)
@@ -71,24 +71,25 @@ class FilesFragment : Fragment() {
 
     }
     private fun addDataToList() {
-        pdfList = ArrayList<PdfData>()
-        pdfList.add(PdfData("pdf1", R.drawable.baseline_cloud_24))
-        pdfList.add(PdfData("pdf2", R.drawable.pdf_ico))
-        pdfList.add(PdfData("pdf3", R.drawable.pdf_ico))
-        pdfList.add(PdfData("pdf4", R.drawable.pdf_ico))
-        pdfList.add(PdfData("rares e gay", R.drawable.pdf_ico))
-        pdfList.add(PdfData("rares e super gay", R.drawable.pdf_ico))
+//        pdfList = ArrayList<PdfData>()
+//        pdfList.add(PdfData("pdf1", R.drawable.baseline_cloud_24, Date()))
+//        pdfList.add(PdfData("pdf2", R.drawable.pdf_ico, Date()))
+//        pdfList.add(PdfData("pdf3", R.drawable.pdf_ico, Date()))
+//        pdfList.add(PdfData("pdf4", R.drawable.pdf_ico, Date()))
+//        pdfList.add(PdfData("rares e gay", R.drawable.pdf_ico, Date()))
+//        pdfList.add(PdfData("rares e super gay", R.drawable.pdf_ico, Date()))
     }
 
     private fun addData() {
-        pdfList = ArrayList<PdfData>()
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+        pdfList = ArrayList<PDFData>()
         val files = mutableListOf<File>()
         val directory = context?.getExternalFilesDir(null)
         if(directory != null)
             searchFilesWithType(directory, files)
 
         for(file in files)
-            pdfList.add(PdfData(file.name, R.drawable.pdf_ico))
+            pdfList.add(PDFData(file.name, R.drawable.pdf_ico, dateFormat.format(Date())))
     }
 
     private fun searchFilesWithType(directory: File, fileList: MutableList<File>) {
