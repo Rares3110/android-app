@@ -7,18 +7,21 @@ import android.content.pm.PackageManager
 import android.graphics.*
 import android.graphics.pdf.PdfDocument
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.documentstorage.app.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
+    private lateinit var auth: FirebaseAuth
     private val filesFragment = FilesFragment()
     private val cloudFragment = CloudFragment()
     private val permissionCode = 101
@@ -26,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        auth = FirebaseAuth.getInstance()
         setContentView(binding.root)
         replaceFragment(filesFragment)
 
@@ -49,6 +53,17 @@ class MainActivity : AppCompatActivity() {
         generatePDFTest("File3.pdf")
         generatePDFTest("File4.pdf")
         generatePDFTest("File5.pdf")
+
+        checkAuth()
+    }
+
+    private fun checkAuth() {
+        val currentUser = auth.currentUser
+
+        if (currentUser == null) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun checkPermissions(): Boolean {
