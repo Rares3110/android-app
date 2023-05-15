@@ -11,7 +11,7 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="244dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/login_border"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:ems="10"
@@ -29,12 +29,12 @@
         android:id="@+id/etPassword"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="#FFFFFF"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/login_border"
         android:ems="10"
-        android:minHeight="48dp"
         android:hint="Password"
         android:inputType="textPassword"
+        android:minHeight="48dp"
         android:padding="8dp"
         android:textColor="#000000"
         android:textSize="16sp"
@@ -70,15 +70,27 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
+        android:layout_width="216dp"
+        android:layout_height="68dp"
+        android:text="Welcome!"
         android:textColor="@color/teal_700"
-        android:textSize="34sp"
+        android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/etEmail"
         app:layout_constraintStart_toStartOf="@+id/etEmail"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.69" />
+        app:layout_constraintVertical_bias="0.396" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/loginSwitch"
+        android:layout_width="122dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="4dp"
+        android:text="Register"
+        android:textColor="@color/teal_700"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/etEmail"
+        app:layout_constraintStart_toStartOf="@+id/etEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

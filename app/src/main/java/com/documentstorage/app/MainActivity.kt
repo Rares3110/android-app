@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         replaceFragment(filesFragment)
 
-        binding.bottomNavigationView.setOnItemSelectedListener {
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
 
             when(it.itemId) {
                 R.id.files -> replaceFragment(filesFragment)

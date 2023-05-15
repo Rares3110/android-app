@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -13,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -20,6 +23,10 @@ import com.google.firebase.auth.GoogleAuthProvider
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var emailEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var submitButton: Button
+    private lateinit var loginSwitch: SwitchMaterial
     private val RC_SIGN_IN = 9001
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +40,15 @@ class LoginActivity : AppCompatActivity() {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        emailEditText = findViewById(R.id.etEmail)
+        passwordEditText = findViewById(R.id.etPassword)
+        submitButton = findViewById(R.id.btnSubmit)
+        loginSwitch = findViewById(R.id.loginSwitch)
+
+        submitButton.setOnClickListener {
+            submitButtonHandler()
+        }
     }
 
     fun signInWithGoogle(view: View) {
@@ -65,6 +81,44 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     // Sign-in failed, display a message to the user
                     Toast.makeText(this, "Google sign-in failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun submitButtonHandler() {
+        if (!loginSwitch.isChecked) {
+            login(emailEditText.text.toString(), passwordEditText.text.toString())
+        } else {
+            register(emailEditText.text.toString(), passwordEditText.text.toString())
+        }
+    }
+
+    private fun login(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Login successful
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // Login failed
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                }
+            }
+    }
+
+    private fun register(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Registration successful
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // Registration failed
+                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
                 }
             }
     }
