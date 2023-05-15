@@ -10,8 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
     private lateinit var logoutButton: Button
@@ -34,6 +37,11 @@ class ProfileFragment : Fragment() {
         val user = firebaseAuth.currentUser
         emailTextView = view.findViewById(R.id.emailText)
         emailTextView.text = user?.email
+
+        val ivProfilePicture = view.findViewById<ImageView>(R.id.ivProfilePicture)
+//        Picasso.get().load("").into(ivProfilePicture)  // pentru Firebase
+        val profileIcon = ContextCompat.getDrawable(requireContext(), R.drawable.avatar)
+        ivProfilePicture.setImageDrawable(profileIcon)
 
         logoutButton.setOnClickListener {
             firebaseAuth.signOut()
