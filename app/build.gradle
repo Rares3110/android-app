@@ -56,6 +56,8 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:1.0.0-alpha30"
 
+    // Pictures
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'

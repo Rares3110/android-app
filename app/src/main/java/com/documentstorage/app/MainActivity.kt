@@ -21,16 +21,16 @@ import java.io.FileOutputStream
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
-    private lateinit var auth: FirebaseAuth
+    private val auth = FirebaseAuth.getInstance()
     private val filesFragment = FilesFragment()
     private val cloudFragment = CloudFragment()
     private val profileFragment = ProfileFragment()
     private val permissionCode = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        checkAuth()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        auth = FirebaseAuth.getInstance()
         setContentView(binding.root)
         replaceFragment(filesFragment)
 
@@ -49,14 +49,12 @@ class MainActivity : AppCompatActivity() {
 
         if (checkPermissions())
             requestPermission()
-
-        generatePDFTest("File1.pdf")
-        generatePDFTest("File2.pdf")
-        generatePDFTest("File3.pdf")
-        generatePDFTest("File4.pdf")
-        generatePDFTest("File5.pdf")
-
-        checkAuth()
+//
+//        generatePDFTest("File1.pdf")
+//        generatePDFTest("File2.pdf")
+//        generatePDFTest("File3.pdf")
+//        generatePDFTest("File4.pdf")
+//        generatePDFTest("File5.pdf")
     }
 
     private fun checkAuth() {
@@ -65,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         if (currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 
