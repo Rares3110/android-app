@@ -1,3 +1,5 @@
 package com.documentstorage.app
 
-data class ImageData(val image: Int)
+import android.graphics.Bitmap
+
+data class ImageData(val image: Bitmap)
