@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val filesFragment = FilesFragment()
     private val cloudFragment = CloudFragment()
     private val profileFragment = ProfileFragment()
+    private val addFragment = AddFragment()
     private val permissionCode = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +41,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.files -> replaceFragment(filesFragment)
                 R.id.cloud -> replaceFragment(cloudFragment)
                 R.id.profile -> replaceFragment(profileFragment)
-                R.id.add -> startActivity(Intent(this, CameraActivity::class.java))
+//                R.id.add -> startActivity(Intent(this, CameraActivity::class.java))
+                R.id.add -> replaceFragment(addFragment)
 
                 else -> replaceFragment(filesFragment)
             }
