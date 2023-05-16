@@ -30,9 +30,13 @@ class PDFAdapter(private var lista: List<PDFData>) : RecyclerView.Adapter<PDFAda
                 Log.i("log", "Ai apasat pe PDF")
                 val intent = Intent(itemView.context, PDFViewerActivity::class.java)
                 intent.putExtra(
-                    "filePath",
-                    itemView.context.getExternalFilesDir(null)?.path + "/" + tvTitle.text
+                    "name",
+                    tvTitle.text
                 ) // Replace "key" with your desired key and "value" with the actual value to pass
+                intent.putExtra(
+                    "type",
+                    lista.find{ it.title == tvTitle.text }?.type?.name
+                )
                 itemView.context.startActivity(intent)
             }
         }

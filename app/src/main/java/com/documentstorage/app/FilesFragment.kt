@@ -36,10 +36,6 @@ class FilesFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        addData()
-        adapter = PDFAdapter(pdfList)
-        recyclerView.adapter = adapter
-
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -50,6 +46,13 @@ class FilesFragment : Fragment() {
                 return true
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        addData()
+        adapter = PDFAdapter(pdfList)
+        recyclerView.adapter = adapter
     }
 
     private fun filterList(query: String?) {
@@ -79,7 +82,7 @@ class FilesFragment : Fragment() {
             searchFilesWithType(directory, files)
 
         for(file in files)
-            pdfList.add(PDFData(file.name, R.drawable.pdf_ico, dateFormat.format(Date())))
+            pdfList.add(PDFData(file.name, R.drawable.pdf_ico, dateFormat.format(Date()), FileType.Files))
     }
 
     private fun searchFilesWithType(directory: File, fileList: MutableList<File>) {

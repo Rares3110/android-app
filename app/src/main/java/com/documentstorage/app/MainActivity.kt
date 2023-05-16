@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         if (checkPermissions())
             requestPermission()
-//
+
 //        generatePDFTest("File1.pdf")
 //        generatePDFTest("File2.pdf")
 //        generatePDFTest("File3.pdf")
