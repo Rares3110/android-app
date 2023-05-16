@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.FileProvider
 import com.documentstorage.app.databinding.ActivityMainBinding
 import com.documentstorage.app.databinding.ActivityPdfviewerBinding
 import com.github.barteksc.pdfviewer.PDFView
@@ -50,6 +51,10 @@ class PDFViewerActivity : AppCompatActivity() {
             deleteFile()
         }
 
+        binding.btnShare.setOnClickListener {
+            share()
+        }
+
         pdfView = findViewById(R.id.pdfView)
         name = intent.getStringExtra("name")!!
         type = enumValueOf<FileType>(intent.getStringExtra("type")!!)
@@ -60,6 +65,7 @@ class PDFViewerActivity : AppCompatActivity() {
             displayPDF(file)
         } else {
             binding.btnUpload.visibility = View.GONE
+            binding.btnShare.visibility = View.GONE
             val user = auth.currentUser
             val fileRef = storage.reference.child(user?.uid!! + "/" + name)
 
@@ -162,6 +168,20 @@ class PDFViewerActivity : AppCompatActivity() {
         } catch (e: Exception) {
             // Handle any errors that occurred during the file saving process
             e.printStackTrace()
+        }
+    }
+
+    private fun share() {
+        val uri = FileProvider.getUriForFile(this, "${this.packageName}.provider", file)
+
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "application/pdf"
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        val chooserIntent = Intent.createChooser(shareIntent, "Share to:")
+        if (chooserIntent.resolveActivity(this.packageManager) != null) {
+            this.startActivity(chooserIntent)
         }
     }
 }
