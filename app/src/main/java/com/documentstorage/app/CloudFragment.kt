@@ -1,6 +1,8 @@
 package com.documentstorage.app
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -18,6 +22,8 @@ class CloudFragment : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var pdfList: ArrayList<PDFData>
     private lateinit var adapter: PDFAdapter
+    private val storage = FirebaseStorage.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,10 +41,6 @@ class CloudFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        addDataToList()
-        adapter = PDFAdapter(pdfList)
-        recyclerView.adapter = adapter
-
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -49,6 +51,14 @@ class CloudFragment : Fragment() {
                 return true
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        pdfList = ArrayList<PDFData>()
+        adapter = PDFAdapter(pdfList)
+        recyclerView.adapter = adapter
+        addData()
     }
 
     private fun filterList(query: String?) {
@@ -66,14 +76,26 @@ class CloudFragment : Fragment() {
                 adapter.setFilteredList(filteredList)
             }
         }
-
     }
-    private fun addDataToList() {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun addData() {
+        val user = auth.currentUser
+        val folderRef = storage.reference.child(user?.uid!! + "/")
         pdfList = ArrayList<PDFData>()
-        pdfList.add(PDFData("pdf1", R.drawable.baseline_cloud_24, dateFormat.format(Date())))
-        pdfList.add(PDFData("pdf2", R.drawable.baseline_cloud_24, dateFormat.format(Date())))
-        pdfList.add(PDFData("pdf3", R.drawable.baseline_cloud_24, dateFormat.format(Date())))
-        pdfList.add(PDFData("pdf4", R.drawable.baseline_cloud_24, dateFormat.format(Date())))
+
+        folderRef.listAll()
+            .addOnSuccessListener { result ->
+                for(item in result.items) {
+                    Log.i("firebase", item.name)
+                    pdfList.add(PDFData(item.name, R.drawable.baseline_blue_cloud_24, "", FileType.Cloud))
+                }
+
+                adapter = PDFAdapter(pdfList)
+                recyclerView.adapter = adapter
+            }
+            .addOnFailureListener { exception ->
+                exception.fillInStackTrace()
+            }
     }
 }
