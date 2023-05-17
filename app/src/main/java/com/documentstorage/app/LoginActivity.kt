@@ -104,6 +104,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     // Login failed
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(applicationContext, "Email or password invalid", Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -119,6 +120,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     // Registration failed
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                    Toast.makeText(applicationContext, "Email or password invalid", Toast.LENGTH_SHORT).show()
                 }
             }
     }

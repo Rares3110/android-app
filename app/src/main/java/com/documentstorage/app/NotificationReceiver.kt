@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -34,7 +35,9 @@ class NotificationReceiver : BroadcastReceiver() {
             .setAutoCancel(true)
 
         // Create an intent for opening the app when the notification is clicked
-        val intent = Intent(context, MainActivity::class.java)
+        val deepLinkUri = Uri.parse("app://deeplink/main")
+        val intent = Intent(Intent.ACTION_VIEW, deepLinkUri)
+        intent.setPackage(context.packageName) // Ensure the intent is resolved within your app
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         notificationBuilder.setContentIntent(pendingIntent)
 
