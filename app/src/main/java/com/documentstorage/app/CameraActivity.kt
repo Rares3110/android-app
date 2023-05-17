@@ -12,10 +12,7 @@ import android.util.Base64
 import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
@@ -101,12 +98,12 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
                             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                                 // Decode the captured image file into a bitmap
                                 val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-
                                 if (bitmap != null) {
                                     // Save the bitmap to a file
                                     val outputBitmapFile = File(externalMediaDirs.first(), "${System.currentTimeMillis()}_bitmap.jpg")
                                     val outputStream = FileOutputStream(outputBitmapFile)
                                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                                    outputStream.flush()
                                     outputStream.close()
 
                                     val resultIntent = Intent().apply {
@@ -117,7 +114,6 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
                                     Log.e(TAG, "Failed to decode bitmap from file: ${imageFile.absolutePath}")
                                     setResult(Activity.RESULT_CANCELED)
                                 }
-
                                 finish()
                             }
 
@@ -132,6 +128,4 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
             }
         }, ContextCompat.getMainExecutor(this))
     }
-
-
 }
