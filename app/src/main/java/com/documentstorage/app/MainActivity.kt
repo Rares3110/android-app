@@ -2,6 +2,10 @@ package com.documentstorage.app
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
@@ -17,6 +21,7 @@ import com.documentstorage.app.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,8 +30,10 @@ class MainActivity : AppCompatActivity() {
     private val filesFragment = FilesFragment()
     private val cloudFragment = CloudFragment()
     private val profileFragment = ProfileFragment()
+    private val addFragment = AddFragment()
     private val tutorialFragment = TutorialFragment()
-    private val permissionCode = 101
+
+  private val permissionCode = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         checkAuth()
@@ -41,8 +48,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.files -> replaceFragment(filesFragment)
                 R.id.cloud -> replaceFragment(cloudFragment)
                 R.id.profile -> replaceFragment(profileFragment)
+                R.id.add -> replaceFragment(addFragment)
                 R.id.questions -> replaceFragment(tutorialFragment)
-                R.id.add -> startActivity(Intent(this, CameraActivity::class.java))
 
                 else -> replaceFragment(filesFragment)
             }
@@ -51,12 +58,11 @@ class MainActivity : AppCompatActivity() {
 
         if (checkPermissions())
             requestPermission()
+    }
 
-//        generatePDFTest("File1.pdf")
-//        generatePDFTest("File2.pdf")
-//        generatePDFTest("File3.pdf")
-//        generatePDFTest("File4.pdf")
-//        generatePDFTest("File5.pdf")
+    override fun onStop() {
+        super.onStop()
+        scheduleNotificationAlarm(this)
     }
 
     private fun checkAuth() {
@@ -131,5 +137,21 @@ class MainActivity : AppCompatActivity() {
 
         pdfDocument.close()
         return file
+    }
+
+    // Schedule the alarm to trigger after 24 hours
+    @SuppressLint("UnspecifiedImmutableFlag")
+    fun scheduleNotificationAlarm(context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val notificationIntent = Intent(context, NotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        // Calculate the alarm time: 24 hours from the current time
+        val alarmTime = Calendar.getInstance().apply {
+            add(Calendar.MINUTE, 1)
+        }
+
+        // Set the alarm to trigger after 24 hours
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime.timeInMillis, pendingIntent)
     }
 }
