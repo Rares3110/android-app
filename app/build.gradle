@@ -42,6 +42,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:24.1.1'
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.3'
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.firebase:firebase-storage:20.0.1'
 
     // CameraX core library
     def camerax_version = "1.0.1"
@@ -56,10 +57,12 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:1.0.0-alpha30"
 
+    // Pictures
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.1'
     implementation 'com.tom-roush:pdfbox-android:2.0.27.0'

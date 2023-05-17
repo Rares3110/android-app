@@ -1,28 +1,17 @@
 package com.documentstorage.app
 
 import android.content.Intent
-import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileFragment : Fragment() {
     private lateinit var logoutButton: Button
     private lateinit var firebaseAuth: FirebaseAuth
@@ -45,10 +34,16 @@ class ProfileFragment : Fragment() {
         emailTextView = view.findViewById(R.id.emailText)
         emailTextView.text = user?.email
 
+        val ivProfilePicture = view.findViewById<ImageView>(R.id.ivProfilePicture)
+//        Picasso.get().load("").into(ivProfilePicture)  // pentru Firebase
+        val profileIcon = ContextCompat.getDrawable(requireContext(), R.drawable.avatar)
+        ivProfilePicture.setImageDrawable(profileIcon)
+
         logoutButton.setOnClickListener {
             firebaseAuth.signOut()
             val intent = Intent(context, LoginActivity::class.java)
             startActivity(intent)
+            requireActivity().finish()
         }
     }
 }

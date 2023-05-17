@@ -30,7 +30,6 @@
         android:background="@drawable/rounded_square"
         app:itemIconSize="32dp"
         app:itemIconTint="@color/white"
-        app:itemPaddingBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
