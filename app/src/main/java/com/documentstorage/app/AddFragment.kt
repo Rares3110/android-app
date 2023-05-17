@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import java.io.File
 import java.io.FileOutputStream
 import com.itextpdf.text.Document
@@ -49,7 +51,7 @@ class AddFragment : Fragment() {
             val intent = Intent(requireContext(), CameraActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_CAPTURE)
         }
-        val generateButton: TextView = view.findViewById(R.id.btnGeneratePDF)
+        val generateButton: MaterialButton = view.findViewById(R.id.btnGeneratePDF)
         nameOfDoc = view.findViewById(R.id.etName)
         generateButton.setOnClickListener {
             val pdfName = nameOfDoc.text.toString().trim()
@@ -61,6 +63,12 @@ class AddFragment : Fragment() {
                 pdfName
             }
             generatePdf(generatedName)
+        }
+        val deleteButton: MaterialButton = view.findViewById(R.id.btnDelete)
+        deleteButton.setOnClickListener{
+            imageList.clear()
+            nameOfDoc.setText("")
+            adapter.notifyDataSetChanged()
         }
     }
 
