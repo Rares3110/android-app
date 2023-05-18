@@ -20,7 +20,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/profile_background">
+            android:background="@drawable/bg_profile">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"
