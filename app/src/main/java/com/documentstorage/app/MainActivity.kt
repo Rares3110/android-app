@@ -9,18 +9,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
-import android.graphics.pdf.PdfDocument
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.documentstorage.app.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -96,47 +91,11 @@ class MainActivity : AppCompatActivity() {
             arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), permissionCode
         )
     }
-
     private fun replaceFragment(fragment: Fragment) {
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayout, fragment)
         fragmentTransaction.commit()
-    }
-
-    private fun generatePDFTest(fileName: String): File {
-        val pdfDocument = PdfDocument()
-
-        val title = Paint()
-        val myPageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(1120, 3000, 1).create()
-        val myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
-        val canvas: Canvas = myPage.canvas
-
-        title.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        title.textSize = 15F
-        title.color = ContextCompat.getColor(this, R.color.purple_200)
-        canvas.drawText("A portal for IT professionals.", 209F, 100F, title)
-        canvas.drawText("Geeks for Geeks", 209F, 80F, title)
-        title.typeface = Typeface.defaultFromStyle(Typeface.NORMAL)
-        title.color = ContextCompat.getColor(this, R.color.purple_200)
-        title.textSize = 15F
-        title.textAlign = Paint.Align.CENTER
-        canvas.drawText("This is sample document which we have created.", 396F, 560F, title)
-        pdfDocument.finishPage(myPage)
-
-        val file = File(this.getExternalFilesDir(null), fileName)
-
-        try {
-            pdfDocument.writeTo(FileOutputStream(file))
-            Toast.makeText(applicationContext, "PDF file generated..", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(applicationContext, "Fail to generate PDF file..", Toast.LENGTH_SHORT)
-                .show()
-        }
-
-        pdfDocument.close()
-        return file
     }
 
     // Schedule the alarm to trigger after 24 hours

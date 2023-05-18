@@ -6,26 +6,24 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
-import java.io.File
-import java.io.FileOutputStream
 import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.PageSize
 import com.itextpdf.text.pdf.PdfWriter
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class AddFragment : Fragment() {
@@ -55,12 +53,10 @@ class AddFragment : Fragment() {
         nameOfDoc = view.findViewById(R.id.etName)
         generateButton.setOnClickListener {
             val pdfName = nameOfDoc.text.toString().trim()
-            val generatedName: String = if (pdfName.isEmpty()) {
+            val generatedName: String = pdfName.ifEmpty {
                 val dateFormat = SimpleDateFormat("dd_MM_yyyy HH_mm_ss", Locale.getDefault())
                 val currentDate = dateFormat.format(Date())
                 "PDF $currentDate"
-            } else {
-                pdfName
             }
             generatePdf(generatedName)
         }
