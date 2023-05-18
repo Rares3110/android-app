@@ -17,7 +17,7 @@ import kotlin.collections.ArrayList
 class FilesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
-    private lateinit var pdfList: ArrayList<PDFData>
+    private var pdfList =  ArrayList<PDFData>()
     private lateinit var adapter: PDFAdapter
 
     override fun onCreateView(
@@ -36,6 +36,9 @@ class FilesFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        addData()
+        adapter = PDFAdapter(pdfList)
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -49,6 +52,7 @@ class FilesFragment : Fragment() {
     }
 
     override fun onResume() {
+        // Aici actualizam datele
         super.onResume()
         addData()
         adapter = PDFAdapter(pdfList)
@@ -74,15 +78,20 @@ class FilesFragment : Fragment() {
     }
 
     private fun addData() {
+        pdfList.clear()
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
-        pdfList = ArrayList<PDFData>()
+
         val files = mutableListOf<File>()
-        val directory = context?.getExternalFilesDir(null)
+        val directory = requireContext().getExternalFilesDir(null)
         if(directory != null)
             searchFilesWithType(directory, files)
 
-        for(file in files)
-            pdfList.add(PDFData(file.name, R.drawable.pdf_ico, dateFormat.format(Date()), FileType.Files))
+        files.sortByDescending { it.lastModified() } // Sort the files based on last modified date in descending order
+
+        for(file in files) {
+            val date = Date(file.lastModified())
+            pdfList.add(PDFData(file.name, R.drawable.pdf_ico, dateFormat.format(date), FileType.Files))
+        }
     }
 
     private fun searchFilesWithType(directory: File, fileList: MutableList<File>) {
