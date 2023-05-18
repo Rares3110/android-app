@@ -106,15 +106,16 @@ class AddFragment : Fragment() {
                 document.add(image)
                 document.newPage()
             }
+            showToast("PDF created successfully")
+            nameOfDoc.setText("")
+            imageList.clear()
+            adapter.notifyDataSetChanged()
+
         } catch (e: Exception) {
             e.printStackTrace()
             showToast("Failed to create PDF")
         } finally {
             document.close()
-            showToast("PDF created successfully")
-            nameOfDoc.setText("")
-            imageList.clear()
-            adapter.notifyDataSetChanged()
         }
     }
 
