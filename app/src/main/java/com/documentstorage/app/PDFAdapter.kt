@@ -49,7 +49,7 @@ class PDFAdapter(private var lista: List<PDFData>) : RecyclerView.Adapter<PDFAda
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PdfViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_pdf, parent, false) // Creeaza o instanta a layout-ului list_item pentru fiecare item
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.pdf_item, parent, false) // Creeaza o instanta a layout-ului list_item pentru fiecare item
         return PdfViewHolder(view) // Returneaza un ViewHolder care contine referintele catre elementele grafice din layout-ul list_item
     }
 

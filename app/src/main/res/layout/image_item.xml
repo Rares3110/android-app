@@ -20,5 +20,5 @@
         android:layout_height="380dp"
         android:layout_margin="8dp"
         android:scaleType="centerCrop"
-        tools:src="@drawable/whatsapp_image" />
+        tools:src="@drawable/login_border" />
 </LinearLayout>
