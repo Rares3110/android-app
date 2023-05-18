@@ -1,12 +1,10 @@
 package com.documentstorage.app
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +18,7 @@ class FilesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
     private var pdfList =  ArrayList<PDFData>()
-    private lateinit var adapter: PDFAdapter
+    private var adapter = PDFAdapter(pdfList)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,9 +36,6 @@ class FilesFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        addData()
-        adapter = PDFAdapter(pdfList)
-
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -56,19 +51,14 @@ class FilesFragment : Fragment() {
     override fun onResume() {
         // Aici actualizam datele
         super.onResume()
-        // Scoatem focusul de pe tastatura
         view?.post {
             searchView.clearFocus()
-            val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(searchView.windowToken, 0)
         }
         addData()
-        adapter = PDFAdapter(pdfList)
-        recyclerView.adapter = adapter
     }
 
     private fun filterList(query: String?) {
-        if (query != null) {
+        if (!query.isNullOrEmpty()) {
             val filteredList  =  ArrayList<PDFData>()
             for (it in pdfList) {
                 if (it.title.lowercase(Locale.ROOT).contains(query.lowercase()))
@@ -100,6 +90,8 @@ class FilesFragment : Fragment() {
             val date = Date(file.lastModified())
             pdfList.add(PDFData(file.name, R.drawable.pdf_ico, dateFormat.format(date), FileType.Files))
         }
+        adapter = PDFAdapter(pdfList)
+        recyclerView.adapter = adapter
     }
 
     private fun searchFilesWithType(directory: File, fileList: MutableList<File>) {
