@@ -1,10 +1,12 @@
 package com.documentstorage.app
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +27,7 @@ class FilesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cloud, container, false)
+        return inflater.inflate(R.layout.fragment_files, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,6 +56,12 @@ class FilesFragment : Fragment() {
     override fun onResume() {
         // Aici actualizam datele
         super.onResume()
+        // Scoatem focusul de pe tastatura
+        view?.post {
+            searchView.clearFocus()
+            val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(searchView.windowToken, 0)
+        }
         addData()
         adapter = PDFAdapter(pdfList)
         recyclerView.adapter = adapter
