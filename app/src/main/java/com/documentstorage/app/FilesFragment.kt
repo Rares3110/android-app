@@ -17,15 +17,15 @@ import kotlin.collections.ArrayList
 class FilesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
-    private lateinit var pdfList: ArrayList<PDFData>
-    private lateinit var adapter: PDFAdapter
+    private var pdfList =  ArrayList<PDFData>()
+    private var adapter = PDFAdapter(pdfList)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cloud, container, false)
+        return inflater.inflate(R.layout.fragment_files, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,14 +49,16 @@ class FilesFragment : Fragment() {
     }
 
     override fun onResume() {
+        // Aici actualizam datele
         super.onResume()
+        view?.post {
+            searchView.clearFocus()
+        }
         addData()
-        adapter = PDFAdapter(pdfList)
-        recyclerView.adapter = adapter
     }
 
     private fun filterList(query: String?) {
-        if (query != null) {
+        if (!query.isNullOrEmpty()) {
             val filteredList  =  ArrayList<PDFData>()
             for (it in pdfList) {
                 if (it.title.lowercase(Locale.ROOT).contains(query.lowercase()))
@@ -74,15 +76,22 @@ class FilesFragment : Fragment() {
     }
 
     private fun addData() {
+        pdfList.clear()
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
-        pdfList = ArrayList<PDFData>()
+
         val files = mutableListOf<File>()
-        val directory = context?.getExternalFilesDir(null)
+        val directory = requireContext().getExternalFilesDir(null)
         if(directory != null)
             searchFilesWithType(directory, files)
 
-        for(file in files)
-            pdfList.add(PDFData(file.name, R.drawable.pdf_ico, dateFormat.format(Date()), FileType.Files))
+        files.sortByDescending { it.lastModified() } // Sort the files based on last modified date in descending order
+
+        for(file in files) {
+            val date = Date(file.lastModified())
+            pdfList.add(PDFData(file.name, R.drawable.pdf_ico, dateFormat.format(date), FileType.Files))
+        }
+        adapter = PDFAdapter(pdfList)
+        recyclerView.adapter = adapter
     }
 
     private fun searchFilesWithType(directory: File, fileList: MutableList<File>) {

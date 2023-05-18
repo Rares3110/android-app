@@ -83,14 +83,16 @@
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/loginSwitch"
-        android:layout_width="122dp"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginBottom="4dp"
-        android:text="Register"
+        android:layout_marginBottom="8dp"
+        android:text="Register "
         android:textColor="@color/teal_700"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/etEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/etEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,25 +3,23 @@ package com.documentstorage.app
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CloudFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
-    private lateinit var pdfList: ArrayList<PDFData>
-    private lateinit var adapter: PDFAdapter
+    private var pdfList =  ArrayList<PDFData>()
+    private var adapter = PDFAdapter(pdfList)
     private val storage = FirebaseStorage.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
@@ -40,7 +38,6 @@ class CloudFragment : Fragment() {
         // Use recyclerView and searchView here
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -55,14 +52,16 @@ class CloudFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        pdfList = ArrayList<PDFData>()
-        adapter = PDFAdapter(pdfList)
-        recyclerView.adapter = adapter
+        // Scoatem focusul de pe tastatura
+        view?.post {
+            searchView.clearFocus()
+        }
+
         addData()
     }
 
     private fun filterList(query: String?) {
-        if (query != null) {
+        if (!query.isNullOrEmpty()) {
             val filteredList  =  ArrayList<PDFData>()
             for (it in pdfList) {
                 if (it.title.lowercase(Locale.ROOT).contains(query.lowercase()))
@@ -82,7 +81,7 @@ class CloudFragment : Fragment() {
     private fun addData() {
         val user = auth.currentUser
         val folderRef = storage.reference.child(user?.uid!! + "/")
-        pdfList = ArrayList<PDFData>()
+        pdfList.clear()
 
         folderRef.listAll()
             .addOnSuccessListener { result ->
