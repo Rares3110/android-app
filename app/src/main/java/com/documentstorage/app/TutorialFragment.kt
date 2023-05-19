@@ -25,7 +25,7 @@ class TutorialFragment : Fragment() {
     }
 
     private fun playVideo() {
-        val videoResId = R.raw.tutorial // Replace with the resource ID of your video file
+        val videoResId = R.raw.demo  // Replace with the resource ID of your video file
         val videoUri = Uri.parse("android.resource://${requireActivity().packageName}/$videoResId")
 
         val mediaController = MediaController(requireContext())

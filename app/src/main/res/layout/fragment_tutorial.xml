@@ -14,7 +14,7 @@
             android:layout_width="350dp"
             android:layout_height="73dp"
             android:layout_gravity="center"
-            android:gravity="center|left"
+            android:gravity="center|start"
             android:text="How to use:"
             android:textColor="@color/teal_700"
             android:textSize="34sp"
@@ -23,7 +23,7 @@
         <VideoView
             android:id="@+id/videoView"
             android:layout_width="350dp"
-            android:layout_height="247dp"
+            android:layout_height="425dp"
             android:layout_gravity="center" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_width="350dp"
             android:layout_height="99dp"
             android:layout_gravity="center"
-            android:gravity="center|left"
+            android:gravity="center|start"
             android:text="This tutorial shows the main features available at the moment. More will come soon!"
             android:textColor="@color/teal_700"
             android:textSize="20sp"
