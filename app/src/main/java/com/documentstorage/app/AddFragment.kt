@@ -1,11 +1,16 @@
 package com.documentstorage.app
 
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.Matrix
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +38,7 @@ class AddFragment : Fragment() {
     private var imageList = ArrayList<ImageData>()
     private lateinit var adapter: ImageAdapter
     private lateinit var nameOfDoc: EditText
+    private lateinit var generateButton: MaterialButton
 
     private val REQUEST_CODE_CAPTURE = 100
 
@@ -49,7 +55,7 @@ class AddFragment : Fragment() {
             val intent = Intent(requireContext(), CameraActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_CAPTURE)
         }
-        val generateButton: MaterialButton = view.findViewById(R.id.btnGeneratePDF)
+        generateButton = view.findViewById(R.id.btnGeneratePDF)
         nameOfDoc = view.findViewById(R.id.etName)
         generateButton.setOnClickListener {
             val pdfName = nameOfDoc.text.toString().trim()
@@ -82,6 +88,39 @@ class AddFragment : Fragment() {
         }
     }
 
+    private fun generateButtonAnimation(success: Boolean) {
+        val originalColor = Color.parseColor("#018786")
+        var targetColor: Int
+
+        if(success) {
+            generateButton.text = "SAVED"
+            targetColor = Color.parseColor("#3700B3")
+            generateButton.setBackgroundColor(targetColor)
+        }
+        else {
+            generateButton.text = "NO PICTURES"
+            targetColor = Color.parseColor("#DC2626")
+            generateButton.setBackgroundColor(targetColor)
+        }
+
+
+        val colorAnimator = ObjectAnimator.ofObject(
+            generateButton,
+            "backgroundColor",
+            ArgbEvaluator(),
+            targetColor,
+            originalColor
+        )
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            generateButton.text = "GENERATE PDF"
+        }, 1000)
+
+        colorAnimator.startDelay = 1000
+        colorAnimator.duration = 1500
+        colorAnimator.start()
+    }
+
     private fun generatePdf(name: String) {
         val document = Document()
         val outputDir = requireContext().getExternalFilesDir(null)
@@ -102,14 +141,16 @@ class AddFragment : Fragment() {
                 document.add(image)
                 document.newPage()
             }
-            showToast("PDF created successfully")
+            //showToast("PDF created successfully")
+            generateButtonAnimation(true)
             nameOfDoc.setText("")
             imageList.clear()
             adapter.notifyDataSetChanged()
 
         } catch (e: Exception) {
             e.printStackTrace()
-            showToast("Failed to create PDF")
+            //showToast("Failed to create PDF")
+            generateButtonAnimation(false)
         } finally {
             document.close()
         }
